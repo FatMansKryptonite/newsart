@@ -1,7 +1,7 @@
 
 import requests
 
-with open('api_keys/gpt_apikey.txt') as f:
+with open('api_keys/news_api_key.txt') as f:
     api_key = f.read()
 
 
@@ -14,7 +14,7 @@ def NewsFromBBC():
         "sortBy": "top",
         "apiKey": api_key
     }
-    main_url = " https://newsapi.org/v1/articles"
+    main_url = "https://newsapi.org/v1/articles"
 
     # fetching data in json format
     res = requests.get(main_url, params=query_params)
@@ -33,11 +33,6 @@ def NewsFromBBC():
     for i in range(len(results)):
         # printing all trending news
         print(i + 1, results[i])
-
-    # to read the news out loud for us
-    from win32com.client import Dispatch
-    speak = Dispatch("SAPI.Spvoice")
-    speak.Speak(results)
 
 
 # Driver Code

@@ -10,8 +10,8 @@ PROMPT = f"Generate an image in Surrealist style depicting a regatta where Belgi
 
 response = openai.Image.create(
     prompt=PROMPT,
-    n=4,
-    size="1024x1024",
+    n=1,
+    size="256x256",
 )
 
 for img in response['data']:

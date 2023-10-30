@@ -1,0 +1,5 @@
+{
+  "main_url": "https://newsapi.org/v1/articles",
+  "source": "bbc-news",
+  "sortBy": "top"
+}

@@ -1,7 +1,7 @@
 import openai
 
 
-with open('api_keys/openai_api_key.txt') as f:
+with open('../api_keys/openai_api_key.txt') as f:
     openai.api_key = f.read()
 
 style = "Post-Impressionism"

@@ -1,4 +1,4 @@
-from news_client.news_client import get_latest_headlines
+from news_client import get_latest_headlines
 
 
 def main():

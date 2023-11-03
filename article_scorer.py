@@ -52,7 +52,7 @@ def get_scores_from_gpt(messages: dict) -> list:
     return response_list
 
 
-def give_article_score(articles: list, prompt_name: list = None) -> list:
+def get_article_score(articles: list, prompt_name: list = None) -> list:
     if prompt_name is None:
         prompt_name = 'article_scoring_prompt'
 

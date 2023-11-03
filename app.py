@@ -1,6 +1,7 @@
 from news_client import get_latest_headlines
 from bbc_scraper import get_text_from_url, is_supported_article
-from article_scorer import give_article_score
+from article_scorer import get_article_score
+from dalle_prompt_designer import get_dalle_prompt
 
 
 def print_articles(articles: list, scores=None) -> None:
@@ -14,8 +15,7 @@ def print_articles(articles: list, scores=None) -> None:
         print(header_string)
 
         if is_supported_article(url):
-            article = get_text_from_url(url)
-            print('\n' + article)
+            print('\n' + articles[i]['content'])
 
         print(100*'-' + 3*'\n')
 
@@ -26,11 +26,18 @@ def main():
     supported_articles = []
     for article in articles:
         if is_supported_article(article["redirect_url"]):
+            article['content'] = get_text_from_url(article["redirect_url"])
             supported_articles.append(article)
 
-    scores = give_article_score(supported_articles)
-
+    scores = get_article_score(supported_articles)
     print_articles(supported_articles, scores)
+
+    max_score = max(scores)
+    chosen_article_index = scores.index(max_score)
+    chosen_articles = [supported_articles[chosen_article_index]]
+
+    dalle_prompt = get_dalle_prompt('romanticism', chosen_articles)
+    print(dalle_prompt)
 
 
 if __name__ == '__main__':

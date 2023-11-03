@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import re
 
 
-def is_bbc_news_article(url: str) -> bool:
+def is_supported_article(url: str) -> bool:
     # TODO Add to external settings file
     supported_subsites = ['uk',
                           'world-us-canada',

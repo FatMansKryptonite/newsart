@@ -32,12 +32,21 @@ def get_query_params_and_url(settings_file: str = "settings/news_client.json") -
     return query_params, main_url
 
 
+def add_redirect_url(articles: dict) -> dict:
+    for article in articles:
+        article['redirect_url'] = requests.get(article['url']).url
+
+    return articles
+
+
 def get_latest_headlines():
     query_params, main_url = get_query_params_and_url()
 
     response = requests.get(main_url, params=query_params)
     open_bbc_page = response.json()
     articles = open_bbc_page["articles"]
+
+    articles = add_redirect_url(articles)
 
     return articles
 

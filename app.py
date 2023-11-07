@@ -3,43 +3,61 @@ from bbc_scraper import get_text_from_url, is_supported_article
 from article_scorer import get_article_score
 from dalle_prompt_designer import get_dalle_prompt
 from image_generator import make_image
+from style_selector import get_style
 
 
-def print_articles(articles: list, scores=None) -> None:
-    for i in range(len(articles)):
-        url = articles[i]["redirect_url"]
-        title = articles[i]["title"]
+def print_articles(articles: list) -> None:
+    for i, article in enumerate(articles):
+        output_str = ''
 
-        header_string = f'{i}: {title} {url}'
-        if scores is not None:
-            header_string = f'{i}: SCORE: {scores[i]} {title} {url}'
-        print(header_string)
+        output_str += f'''{i}: {article["title"]}
+{{
+    TITLE: {article["title"]},
+    URL: {article["url"]},
+    SCORE: {article["score"]},
+    FORMAT: {article["format"]},
+    SUPPORTED: {article["supported"]}
+}}'''
 
-        if is_supported_article(url):
-            print('\n' + articles[i]['content'])
+        if article["supported"]:
+            output_str += '\n' + articles[i]['content']
+        output_str += '\n' + 100*'-' + 2*'\n'
 
-        print(100*'-' + 3*'\n')
+        print(output_str)
 
 
-def main():
+def main() -> None:
+    # Get articles
     articles = get_latest_headlines()
 
+    # Scrape articles
     supported_articles = []
     for article in articles:
-        if is_supported_article(article["redirect_url"]):
-            article['content'] = get_text_from_url(article["redirect_url"])
+        article['supported'], article['format'] = is_supported_article(article["redirect_url"])
+
+        if article['supported']:
+            article['content'] = get_text_from_url(article["redirect_url"], article['format'])
             supported_articles.append(article)
 
+    # Score articles
     scores = get_article_score(supported_articles)
-    print_articles(supported_articles, scores)
+    for article in articles:
+        article['score'] = None
+    for article, score in zip(supported_articles, scores):
+        article['score'] = score
+    print_articles(articles)
 
+    # Choose articles
     max_score = max(scores)
     chosen_article_index = scores.index(max_score)
     chosen_articles = [supported_articles[chosen_article_index]]
 
-    dalle_prompt = get_dalle_prompt('romanticism', chosen_articles)
+    # Make DALL E prompt
+    chosen_style = get_style()
+    dalle_prompt = get_dalle_prompt(chosen_style, chosen_articles)
     print(dalle_prompt)
 
+    # Generate image
     dalle_response = make_image(dalle_prompt)
     print(dalle_response.data[0].url)
 

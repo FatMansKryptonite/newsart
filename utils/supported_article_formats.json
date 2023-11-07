@@ -1,0 +1,14 @@
+{
+  "news": {
+    "url_pattern": "https:\\/\\/www\\.bbc\\.co\\.uk\\/news\\/([a-z]|-)+-\\d{8}",
+    "supported": true
+  },
+  "live": {
+    "url_pattern": "https:\\/\\/www\\.bbc\\.co\\.uk\\/news\\/live\\/([a-z]|-)+-\\d{8}",
+    "supported": false
+  },
+  "video": {
+    "url_pattern": "https:\\/\\/www\\.bbc\\.co\\.uk\\/news\\/av\\/([a-z]|-)+-\\d{8}",
+    "supported": true
+  }
+}

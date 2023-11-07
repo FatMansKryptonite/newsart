@@ -2,14 +2,14 @@
   "cheap": {
     "model": "dall-e-2",
     "n": 1,
-    "response_format": "url",
+    "response_format": "b64_json",
     "size": "256x256"
   },
   "quality": {
     "model": "dall-e-3",
     "n": 1,
     "quality": "hd",
-    "response_format": "url",
+    "response_format": "b64_json",
     "size": "1024x1024",
     "style": "vivid"
   }

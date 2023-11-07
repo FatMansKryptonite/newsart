@@ -1,6 +1,7 @@
 import json
 import re
 from openai import OpenAI
+from news_art import NewsArt
 
 with open('api_keys/openai_api_key.txt') as f:
     api_key = f.read()
@@ -43,7 +44,7 @@ def get_prompt_from_gpt(messages: dict) -> list:
     return response
 
 
-def get_dalle_prompt(art_style: str, articles: list, prompt_name: list = None) -> str:
+def get_dall_e_prompt(news_art: NewsArt, prompt_name: list = None) -> str:
     if prompt_name is None:
         prompt_name = 'make_dalle_prompt_prompt'
 
@@ -51,7 +52,7 @@ def get_dalle_prompt(art_style: str, articles: list, prompt_name: list = None) -
         gpt_prompts = json.load(f)
     messages = gpt_prompts[prompt_name]['messages']
 
-    messages = parse_message(messages, keyword_map=make_keyword_map(art_style, articles))
+    messages = parse_message(messages, keyword_map=make_keyword_map(news_art.art_style, news_art.articles))
     dalle_prompt = get_prompt_from_gpt(messages)
 
     return dalle_prompt

@@ -1,9 +1,10 @@
 from news_client import get_latest_headlines
 from bbc_scraper import get_text_from_url, is_supported_article
 from article_scorer import get_article_score
-from dall_e_prompt_designer import get_dalle_prompt
+from dall_e_prompt_designer import get_dall_e_prompt
 from image_generator import make_image
 from style_selector import get_style
+from news_art import NewsArt
 
 
 def print_articles(articles: list) -> None:
@@ -50,16 +51,20 @@ def main() -> None:
     # Choose articles
     max_score = max(scores)
     chosen_article_index = scores.index(max_score)
-    chosen_articles = [supported_articles[chosen_article_index]]
+    news_art = NewsArt(articles=[supported_articles[chosen_article_index]])
+
+    # Define art style
+    news_art.art_style = get_style()
 
     # Make DALL E prompt
-    chosen_style = get_style()
-    dall_e_prompt = get_dalle_prompt(chosen_style, chosen_articles)
+    dall_e_prompt = get_dall_e_prompt(news_art)
     print(dall_e_prompt)
 
     # Generate image
-    dall_e_response = make_image(dall_e_prompt, configuration_name='quality')
-    print(dall_e_response.data[0].url)
+    news_art.dall_e_response = make_image(dall_e_prompt, configuration_name='cheap')
+    print(news_art.dall_e_response.data[0].url)
+
+    # Save news art
 
 
 if __name__ == '__main__':

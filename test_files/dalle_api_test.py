@@ -1,7 +1,7 @@
 import openai
 
 
-with open('api_keys/openai_api_key.txt') as f:
+with open('../api_keys/openai_api_key.txt') as f:
     openai.api_key = f.read()
 
 style = "Post-Impressionism"
@@ -9,9 +9,12 @@ PROMPT = f"Generate an image in {style} of Belgians racing boats made of giant p
 PROMPT = f"Generate an image in Surrealist style depicting a regatta where Belgians are racing boats made of giant, intricately carved pumpkins floating on a whimsical river under a sky filled with swirling, dream-like clouds."
 
 response = openai.Image.create(
+    model="dall-e-3",
+    quality="standard",
+    style="vivid",
     prompt=PROMPT,
     n=1,
-    size="256x256",
+    size="1024x1024",
 )
 
 for img in response['data']:

@@ -58,7 +58,7 @@ def main() -> None:
     print(dall_e_prompt)
 
     # Generate image
-    dall_e_response = make_image(dall_e_prompt)
+    dall_e_response = make_image(dall_e_prompt, configuration_name='quality')
     print(dall_e_response.data[0].url)
 
 

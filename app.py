@@ -1,7 +1,7 @@
 from news_client import get_latest_headlines
 from bbc_scraper import get_text_from_url, is_supported_article
 from article_scorer import get_article_score
-from dalle_prompt_designer import get_dalle_prompt
+from dall_e_prompt_designer import get_dalle_prompt
 from image_generator import make_image
 from style_selector import get_style
 
@@ -54,12 +54,12 @@ def main() -> None:
 
     # Make DALL E prompt
     chosen_style = get_style()
-    dalle_prompt = get_dalle_prompt(chosen_style, chosen_articles)
-    print(dalle_prompt)
+    dall_e_prompt = get_dalle_prompt(chosen_style, chosen_articles)
+    print(dall_e_prompt)
 
     # Generate image
-    dalle_response = make_image(dalle_prompt)
-    print(dalle_response.data[0].url)
+    dall_e_response = make_image(dall_e_prompt, configuration_name='quality')
+    print(dall_e_response.data[0].url)
 
 
 if __name__ == '__main__':

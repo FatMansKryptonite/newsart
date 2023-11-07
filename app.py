@@ -1,3 +1,5 @@
+import os
+
 from news_client import get_latest_headlines
 from bbc_scraper import get_text_from_url, is_supported_article
 from article_scorer import get_article_score
@@ -57,14 +59,16 @@ def main() -> None:
     news_art.art_style = get_style()
 
     # Make DALL E prompt
-    dall_e_prompt = get_dall_e_prompt(news_art)
-    print(dall_e_prompt)
+    news_art.dall_e_prompt = get_dall_e_prompt(news_art)
+    print(news_art.dall_e_prompt)
 
     # Generate image
-    news_art.dall_e_response = make_image(dall_e_prompt, configuration_name='cheap')
-    print(news_art.dall_e_response.data[0].url)
+    news_art.dall_e_response = make_image(news_art.dall_e_prompt, configuration_name='quality')
 
     # Save news art
+    path_to_image = news_art.save_to_file()
+    absolute_path = os.path.abspath(path_to_image).replace('\\', '/')
+    print(f'Image available at (clickable on Winodws): file:///{absolute_path}')
 
 
 if __name__ == '__main__':

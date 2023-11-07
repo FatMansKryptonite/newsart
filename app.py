@@ -2,6 +2,7 @@ from news_client import get_latest_headlines
 from bbc_scraper import get_text_from_url, is_supported_article
 from article_scorer import get_article_score
 from dalle_prompt_designer import get_dalle_prompt
+from image_generator import make_image
 
 
 def print_articles(articles: list, scores=None) -> None:
@@ -38,6 +39,9 @@ def main():
 
     dalle_prompt = get_dalle_prompt('romanticism', chosen_articles)
     print(dalle_prompt)
+
+    dalle_response = make_image(dalle_prompt)
+    print(dalle_response.data[0].url)
 
 
 if __name__ == '__main__':

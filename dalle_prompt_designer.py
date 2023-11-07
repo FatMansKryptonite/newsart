@@ -1,10 +1,10 @@
 import json
-
-import openai
 import re
+from openai import OpenAI
 
 with open('api_keys/openai_api_key.txt') as f:
-    openai.api_key = f.read()
+    api_key = f.read()
+client = OpenAI(api_key=api_key)
 
 
 def make_keyword_map(art_style: str, articles: list) -> dict:
@@ -32,8 +32,9 @@ def parse_message(messages: list, keyword_map: dict) -> list:
 
 
 def get_prompt_from_gpt(messages: dict) -> list:
-    chat = openai.ChatCompletion.create(
-        model="gpt-4", messages=messages
+    chat = client.chat.completions.create(
+        model="gpt-4",
+        messages=messages
     )
 
     response = chat.choices[0].message.content

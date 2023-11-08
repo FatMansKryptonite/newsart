@@ -55,6 +55,9 @@ def main() -> None:
     chosen_article_index = scores.index(max_score)
     news_art = NewsArt(articles=[supported_articles[chosen_article_index]])
 
+    # Generate news art keywords
+    news_art.make_keywords()
+
     # Define art style
     news_art.art_style = get_style()
 

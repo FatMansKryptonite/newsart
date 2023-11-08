@@ -24,6 +24,10 @@ class NewsArt:
 
         self.time_stamp = datetime.now().strftime("%Y-%m-%d_H%HM%MS%S")
 
+    def make_keywords(self) -> list:
+        pass
+        # TODO implement
+
     def save_to_file(self, location: str = "news_art_archive") -> str:
         data = {
             'time_stamp': self.time_stamp,

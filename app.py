@@ -7,6 +7,7 @@ from dall_e_prompt_designer import get_dall_e_prompt
 from image_generator import make_image
 from style_selector import get_style
 from news_art import NewsArt
+from utils.logger import log_keywords, log_news_art
 
 
 def print_articles(articles: list) -> None:
@@ -55,7 +56,7 @@ def main() -> None:
     chosen_article_index = scores.index(max_score)
     news_art = NewsArt(articles=[supported_articles[chosen_article_index]])
 
-    # Generate news art keywords
+    # Generate and log news art keywords
     news_art.make_keywords()
 
     # Define art style
@@ -68,10 +69,11 @@ def main() -> None:
     # Generate image
     news_art.dall_e_response = make_image(news_art.dall_e_prompt, configuration_name='quality')
 
-    # Save news art
-    path_to_image = news_art.save_to_file()
+    # Log news art
+    path_to_image = log_news_art(news_art)
     absolute_path = os.path.abspath(path_to_image).replace('\\', '/')
     print(f'Image available at (clickable on Winodws): file:///{absolute_path}')
+    log_keywords(news_art)
 
 
 if __name__ == '__main__':

@@ -18,9 +18,9 @@ def make_keyword_map(articles: list) -> dict:
     title_list_string = f'[{", ".join(titles)}]'
     keyword_map['title_list'] = title_list_string
 
-    with open('settings/covered_keywords.json') as f:
+    with open('utils/covered_keywords.json') as f:
         covered_keywords = json.load(f)
-    keyword_map['recent_topics_keyword_list'] = str(covered_keywords[:100])
+    keyword_map['recent_topics_keyword_list'] = str(covered_keywords[-100:])
 
     return keyword_map
 

@@ -1,3 +1,4 @@
 api_keys/
 .idea/
 news_art_archive/
+utils/covered_keywords.json

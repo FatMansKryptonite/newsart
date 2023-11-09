@@ -1,6 +1,7 @@
 from openai.types.images_response import ImagesResponse
 from app_config import AppConfig
 from datetime import datetime
+from gpt_client import prompt_gpt
 import json
 import os
 import base64
@@ -24,9 +25,18 @@ class NewsArt:
 
         self.time_stamp = datetime.now().strftime("%Y-%m-%d_H%HM%MS%S")
 
-    def make_keywords(self) -> list:
-        pass
-        # TODO implement
+    def make_keyword_map(self):
+        keyword_map = {}
+
+        keyword_map['article_list'] = str([article['content'] for article in self.articles])
+
+        return keyword_map
+
+    def make_keywords(self):
+        response = prompt_gpt('make_article_keywords', keyword_map=self.make_keyword_map())
+        keywords = response['keywords']
+
+        self.article_keywords = keywords
 
     def save_to_file(self, location: str = "news_art_archive") -> str:
         data = {

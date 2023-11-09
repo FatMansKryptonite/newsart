@@ -1,0 +1,80 @@
+[
+  {
+    "name": "article_scoring",
+    "notes": "Base prompt to get GPT to score articles based on certain predefined factors. Messages need to be adjusted to include article information.",
+    "messages": [
+      {"role": "system", "content": "You are an intelligent assistant helping with scoring of news articles. You score them on a range from 0-1 based on importance, novelty, and if it could be transformed into an interesting visual scene. You will receive the article titles in an ordered list on the format \"[TITLE1, TITLE2, ...]\" and will call the function article_score_consumer with a list of scores, one for every article respectively. In addition to the list of titles, you will get keywords relating to recently covered stories, rank recently covered topics significantly lower. Your scores must be in the range 0-1. You will take the following keywords into account when making your judgement and rate articles relating to them higher: $interesting_topics_list$"},
+      {"role": "user", "content": "$title_list$ \n RECENT KEYWORDS: $recent_topics_keyword_list$"}
+    ],
+    "functions": [
+      {
+        "name": "article_score_consumer",
+        "description": "Consumes scores for a list of given news article titles.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "scores": {
+              "type": "array",
+              "description": "List of scores for news articles.",
+              "items": {
+                "type": "number"
+              }
+            }
+          },
+          "required": ["scores"]
+        }
+      }
+    ]
+  },
+  {
+    "name": "make_article_keywords",
+    "notes": "Base prompt to get GPT to summarise news articles as a set of keywords.",
+    "messages": [
+      {"role": "system", "content": "You are an intelligent assistant helping to generate keywords for news articles. You will receive articles on the format \"[ARTICLE1, ARTICLE2, ...]\" and will call the function article_keyword_consumer with a list of roughly 3-5 keywords per article. You will provide keywords that summarise the article or articles most influential themes and topics."},
+      {"role": "user", "content": "$article_list$"}
+    ],
+    "functions": [
+      {
+        "name": "article_keyword_consumer",
+        "description": "Consumes a list of repeatable, representative keywords for a list of given news articles. Takes roughly 3-5 keywords per article.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "keywords": {
+              "type": "array",
+              "description": "List of keywords summarising news articles.",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": ["keywords"]
+        }
+      }
+    ]
+  },
+  {
+    "name": "make_dall_e_prompt",
+    "notes": "Base prompt to get GPT to design DALL-E prompts from news articles.",
+    "messages": [
+      {"role": "system", "content": "You are an intelligent assistant helping to write DALL-E prompts. You will receive articles and an art style on the format \"ART_STYLE; [ARTICLE1, ARTICLE2, ...]\" and will call the function make_article_image. You will design a scene that summarises the news article or articles in an interesting way taking the art style into account. Make sure the prominent features of the article are present in the scene and emphasise emotion over accuracy. Additionally, the prompt shall be compliant with DALL-E's content policy, removing names of non-public figures and violent content."},
+      {"role": "user", "content": "$art_style$; $article_list$"}
+    ],
+    "functions": [
+      {
+        "name": "make_article_image",
+        "description": "Create images from a text prompt describing a scene from a news article.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "prompt": {
+              "type": "string",
+              "description": "DALL-E compliant prompt describing a scene from a news article."
+            }
+          },
+          "required": ["prompt"]
+        }
+      }
+    ]
+  }
+]

@@ -1,44 +1,54 @@
+import ast
 import json
 import re
 from openai import OpenAI
-from news_art import NewsArt
 
 with open('api_keys/openai_api_key.txt') as f:
     api_key = f.read()
 client = OpenAI(api_key=api_key)
 
 
-def parse_message(messages: list, paramter_map: dict) -> list:
+def parse_message(messages: list, keyword_map: dict) -> list:
+    for i in range(len(messages)):
+        message = messages[i]['content']
+        matches = re.findall(r'\$(?:[a-z]|_)+\$', message)
+        for match in matches:
+            message = message.replace(match, keyword_map[match[1:-1]])
 
-    message = messages[-1]['content']
-    matches = re.findall(r'\$(?:[a-z]|_)+\$', message)
-
-    for match in matches:
-        message = message.replace(match, paramter_map[match[1:-1]])
-
-    messages[-1]['content'] = message
+        messages[i]['content'] = message
     return messages
 
 
-def get_prompt_from_gpt(messages: dict) -> list:
+def get_prompt_from_gpt(messages: dict, functions: list) -> list:
     chat = client.chat.completions.create(
-        model="gpt-4",
-        messages=messages
+        model='gpt-4',
+        messages=messages,
+        functions=functions,
+        function_call={"name": functions[0]['name']}
     )
 
-    response = chat.choices[0].message.content
+    response = chat.choices[0].message.function_call.arguments
     return response
 
 
-def prompt_gpt(prompt_name: str, paramter_map: dict) -> str:
-    if prompt_name is None:
-        prompt_name = 'make_dalle_prompt_prompt'
+def clean_response(str_response: str) -> object:
+    response = ast.literal_eval(str_response)
+    return response
 
-    with open('settings/gpt_prompts.json') as f:
+
+def prompt_gpt(prompt_name: str, keyword_map: dict = None) -> str:
+    with open('settings/gpt_interfaces.json') as f:
         gpt_prompts = json.load(f)
-    messages = gpt_prompts[prompt_name]['messages']
 
-    messages = parse_message(messages, paramter_map=paramter_map)
-    prompt = get_prompt_from_gpt(messages)
+    for prompt in gpt_prompts:
+        if prompt['name'] == prompt_name:
+            break
 
-    return dalle_prompt
+    messages = prompt['messages']
+    if keyword_map is not None:
+        messages = parse_message(messages, keyword_map)
+
+    str_response = get_prompt_from_gpt(messages, prompt['functions'])
+    response = clean_response(str_response)
+
+    return response

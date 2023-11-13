@@ -72,7 +72,7 @@ def main() -> None:
     # Log news art
     path_to_image = log_news_art(news_art)
     absolute_path = os.path.abspath(path_to_image).replace('\\', '/')
-    print(f'Image available at (clickable on Winodws): file:///{absolute_path}')
+    print(f'Image available at (clickable on Winodws): "file:///{absolute_path}"')
     log_keywords(news_art)
 
 

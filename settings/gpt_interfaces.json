@@ -30,13 +30,13 @@
     "name": "make_article_keywords",
     "notes": "Base prompt to get GPT to summarise news articles as a set of keywords.",
     "messages": [
-      {"role": "system", "content": "You are an intelligent assistant helping to generate keywords for news articles. You will receive articles on the format \"[ARTICLE1, ARTICLE2, ...]\" and will call the function article_keyword_consumer with a list of roughly 3-5 keywords per article. You will provide keywords that summarise the article or articles most influential themes and topics."},
+      {"role": "system", "content": "You are an intelligent assistant helping to generate keywords for news articles. You will receive articles on the format \"[ARTICLE1, ARTICLE2, ...]\" and will call the function article_keyword_consumer with a list of roughly 5 keywords per article. You will provide keywords that summarise the article or articles most influential themes and topics in short, high-level, generic terms. EXAMPLE: An article about a harbour bombing in a war between russia and ukraine might have the keywords [\"war\", \"ukraine\", \"russia\", \"harbour\", \"bombing\"]."},
       {"role": "user", "content": "$article_list$"}
     ],
     "functions": [
       {
         "name": "article_keyword_consumer",
-        "description": "Consumes a list of repeatable, representative keywords for a list of given news articles. Takes roughly 3-5 keywords per article.",
+        "description": "Consumes a list of repeatable, representative keywords for a list of given news articles. Takes roughly 5 keywords per article.",
         "parameters": {
           "type": "object",
           "properties": {
